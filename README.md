@@ -1,6 +1,6 @@
-# Prometheus
+# Languages
 
-Set up common prometheus configurations
+Set up programming languages SmartLogic uses.
 
 ## Install to requirements.yml
 
