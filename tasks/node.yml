@@ -1,0 +1,41 @@
+---
+
+- name: Node | Check if asdf-node is present
+  shell: asdf plugin-list | grep nodejs
+  ignore_errors: yes
+  register: asdf_node_present
+  tags: node
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Node | Install asdf-node
+  shell: asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+  when: asdf_node_present | failed
+  tags: node
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Node | Check if nodejs version is present
+  shell: asdf list nodejs | grep {{ asdf_nodejs_version }}
+  ignore_errors: yes
+  register: asdf_nodejs_version_present
+  tags: node
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Node | Install nodejs version
+  shell: "bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring && asdf install nodejs {{ asdf_nodejs_version }}"
+  when: asdf_nodejs_version_present | failed
+  tags: node
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Node | Set global version of nodejs
+  lineinfile:
+    path: "/home/{{ asdf_user }}/.tool-versions"
+    line: 'nodejs {{ asdf_nodejs_version }}'
+  tags: node
+  become: true
+  become_user: "{{ asdf_user }}"

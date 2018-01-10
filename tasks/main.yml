@@ -1,0 +1,8 @@
+---
+- include: asdf.yml
+
+- when: action == "elixir"
+  include: elixir.yml
+
+- when: action == "node"
+  include: node.yml

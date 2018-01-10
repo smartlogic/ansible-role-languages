@@ -1,0 +1,74 @@
+---
+- name: Check if asdf is present
+  shell: "test -x /home/{{ asdf_user }}/.asdf/bin/asdf"
+  ignore_errors: yes
+  register: asdf_present
+  tags: elixir
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: asdf | package dependencies
+  apt: pkg={{ item }} state=present force="yes"  update_cache="yes"
+  with_items:
+    - git
+    - build-essential
+    - automake
+    - m4
+    - libncurses5-dev
+    - libssh-dev
+    - unixodbc-dev
+    - unzip
+  tags: elixir
+  become: true
+
+- name: Download asdf
+  get_url: url=https://github.com/asdf-vm/asdf/archive/v{{ asdf_version }}.tar.gz
+           dest=/tmp/asdf-{{ asdf_version }}.tar.gz
+  when: asdf_present | failed
+  tags: elixir
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Unpack asdf
+  unarchive:
+    src: /tmp/asdf-{{ asdf_version }}.tar.gz
+    dest: "/home/{{ asdf_user }}/"
+    remote_src: true
+  when: asdf_present | failed
+  tags: elixir
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: stat .asdf
+  stat: path=/home/{{ asdf_user }}/.asdf
+  register: asdf_stat
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Move asdf-version to .asdf
+  command: mv /home/{{ asdf_user }}/asdf-{{ asdf_version }} /home/{{ asdf_user }}/.asdf
+  when: asdf_stat.stat.exists == false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: stat .tool-versions
+  stat: path=/home/{{ asdf_user }}/.tool-versions
+  register: asdf_tool_versions_stat
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ensure .tool-versions
+  file:
+    path: "/home/{{ asdf_user }}/.tool-versions"
+    state: touch
+  when: asdf_tool_versions_stat.stat.exists == false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Source asdf for login shells
+  lineinfile:
+    path: /home/{{ asdf_user }}/.bashrc
+    line: '. $HOME/.asdf/asdf.sh'
+  become: true
+  become_user: "{{ asdf_user }}"
