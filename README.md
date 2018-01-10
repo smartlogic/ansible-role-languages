@@ -5,8 +5,8 @@ Set up common prometheus configurations
 ## Install to requirements.yml
 
 ```
-- src: git+git@github.com:smartlogic/ansible-role-prometheus
-  name: prometheus
+- src: git+git@github.com:smartlogic/ansible-role-languages
+  name: languages
   version: 0.1.0
 ```
 
