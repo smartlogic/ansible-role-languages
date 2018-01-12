@@ -6,3 +6,6 @@
 
 - when: action == "node"
   include: node.yml
+
+- when: action == "ruby"
+  include: ruby.yml
