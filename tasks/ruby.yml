@@ -1,4 +1,23 @@
 ---
+- name: Ruby | install dependencies
+  apt: pkg={{ item }} state=present force="yes"  update_cache="yes"
+  with_items:
+    - build-essential
+    - libffi-dev
+    - libgdbm-dev
+    - libncurses5-dev
+    - libreadline-dev
+    - libreadline6-dev
+    - libtinfo-dev
+    - libyaml-dev
+    - libssl-dev
+    - libyaml-dev
+    - libxml2
+    - libxml2-dev
+    - libxslt1-dev
+  tags: ruby
+  become: true
+
 - name: Ruby | Check if asdf-erlang is present
   shell: asdf plugin-list | grep erlang
   ignore_errors: yes
