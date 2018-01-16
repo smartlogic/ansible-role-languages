@@ -1,0 +1,64 @@
+---
+- name: Ruby | Check if asdf-erlang is present
+  shell: asdf plugin-list | grep erlang
+  ignore_errors: yes
+  register: asdf_erlang_present
+  tags: ruby
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | Check if asdf-ruby is present
+  shell: asdf plugin-list | grep ruby
+  ignore_errors: yes
+  register: asdf_ruby_present
+  tags: ruby
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | Install asdf-ruby
+  shell: asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git
+  when: asdf_ruby_present | failed
+  tags: ruby
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | Check if ruby version is present
+  shell: asdf list ruby | grep {{ asdf_ruby_version }}
+  ignore_errors: yes
+  register: asdf_ruby_version_present
+  tags: ruby
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | Install ruby version
+  shell: asdf install ruby {{ asdf_ruby_version }}
+  when: asdf_ruby_version_present | failed
+  tags: ruby
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | Set global version of ruby
+  lineinfile:
+    path: "/home/{{ asdf_user }}/.tool-versions"
+    line: 'ruby {{ asdf_ruby_version }}'
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | stat bundler
+  shell: gem list | grep bundler
+  ignore_errors: yes
+  register: asdf_ruby_bundler_version_present
+  tags: ruby
+  changed_when: false
+  become: true
+  become_user: "{{ asdf_user }}"
+
+- name: Ruby | Install bundler
+  shell: gem install bundler
+  when: asdf_ruby_bundler_version_present | failed
+  tags: ruby
+  become: true
+  become_user: "{{ asdf_user }}"

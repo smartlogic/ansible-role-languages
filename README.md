@@ -46,6 +46,8 @@ asdf_nodejs_version: '6.11.2'
 
 ```yaml
 - hosts: servers
+  environment:
+    PATH: /home/{{ asdf_user }}/.asdf/bin:/home/{{ asdf_user }}/.asdf/shims:{{ ansible_env.PATH }}
   roles:
     - { role: languages, tags: ['elixir'], action: "elixir" }
     - { role: languages, tags: ['node'], action: "node" }
