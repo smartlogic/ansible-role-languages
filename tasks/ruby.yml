@@ -63,6 +63,7 @@
   lineinfile:
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'ruby {{ asdf_ruby_version }}'
+    regexp: '^ruby '
   become: true
   become_user: "{{ asdf_user }}"
 

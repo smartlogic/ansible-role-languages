@@ -67,6 +67,7 @@
   lineinfile:
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'erlang {{ asdf_erlang_version }}'
+    regexp: '^erlang '
   become: true
   become_user: "{{ asdf_user }}"
 
@@ -74,5 +75,6 @@
   lineinfile:
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'elixir {{ asdf_elixir_version }}'
+    regexp: '^elixir '
   become: true
   become_user: "{{ asdf_user }}"

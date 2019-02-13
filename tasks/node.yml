@@ -36,6 +36,7 @@
   lineinfile:
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'nodejs {{ asdf_nodejs_version }}'
+    regexp: '^nodejs '
   tags: node
   become: true
   become_user: "{{ asdf_user }}"
