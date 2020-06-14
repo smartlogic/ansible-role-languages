@@ -1,8 +1,9 @@
 ---
-asdf_version: '0.3.0'
+asdf_user_create: false
+asdf_version: '0.7.8'
 asdf_user: 'deploy'
 
-asdf_erlang_version: '20.0'
-asdf_elixir_version: '1.5.1'
-asdf_nodejs_version: '6.11.2'
-asdf_ruby_version: '2.5.0'
+asdf_erlang_version: '23.0.2'
+asdf_elixir_version: '1.10.3'
+asdf_nodejs_version: '12.18.0'
+asdf_ruby_version: '2.7.1'

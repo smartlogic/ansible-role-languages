@@ -1,6 +1,12 @@
 ---
-- name: Elixir | Check if asdf-erlang is present
-  shell: asdf plugin-list | grep erlang
+- include_tasks: elixir-deps-debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: elixir-deps-redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Elixir | Check if asdf erlang is present
+  shell: asdf plugin list | grep erlang
   ignore_errors: yes
   register: asdf_erlang_present
   tags: elixir
@@ -8,15 +14,15 @@
   become: true
   become_user: "{{ asdf_user }}"
 
-- name: Elixir | Install asdf-erlang
-  shell: asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
-  when: asdf_erlang_present | failed
+- name: Elixir | Install asdf erlang
+  shell: asdf plugin add erlang
+  when: asdf_erlang_present is failed
   tags: elixir
   become: true
   become_user: "{{ asdf_user }}"
 
-- name: Elixir | Check if asdf-elixir is present
-  shell: asdf plugin-list | grep elixir
+- name: Elixir | Check if asdf elixir is present
+  shell: asdf plugin list | grep elixir
   ignore_errors: yes
   register: asdf_elixir_present
   tags: elixir
@@ -24,9 +30,9 @@
   become: true
   become_user: "{{ asdf_user }}"
 
-- name: Elixir | Install asdf-elixir
-  shell: asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
-  when: asdf_elixir_present | failed
+- name: Elixir | Install asdf elixir
+  shell: asdf plugin add elixir
+  when: asdf_elixir_present is failed
   tags: elixir
   become: true
   become_user: "{{ asdf_user }}"
@@ -42,7 +48,7 @@
 
 - name: Elixir | Install erlang version
   shell: asdf install erlang {{ asdf_erlang_version }}
-  when: asdf_erlang_version_present | failed
+  when: asdf_erlang_version_present is failed
   tags: elixir
   become: true
   become_user: "{{ asdf_user }}"
@@ -58,7 +64,7 @@
 
 - name: Elixir | Install elixir version
   shell: asdf install elixir {{ asdf_elixir_version }}
-  when: asdf_elixir_version_present | failed
+  when: asdf_elixir_version_present is failed
   tags: elixir
   become: true
   become_user: "{{ asdf_user }}"

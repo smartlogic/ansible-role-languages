@@ -1,0 +1,11 @@
+---
+- name: asdf-vm | install dependencies
+  tags: asdf
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - git
+      - curl
+      - bsdmainutils
+  become: true

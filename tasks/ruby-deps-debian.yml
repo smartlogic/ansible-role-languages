@@ -1,0 +1,42 @@
+---
+- name: Ruby | install dependencies
+  tags: ruby
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - autoconf
+      - bison
+      - build-essential
+      - libssl-dev
+      - libyaml-dev
+      - libreadline6-dev
+      - zlib1g-dev
+      - libncurses5-dev
+      - libffi-dev
+      - libgdbm-dev
+      - libdb-dev
+      - libxml2
+      - libxml2-dev
+      - libxslt1-dev
+  become: true
+
+- name: Ruby | install libgdbm5 for the right ubuntu
+  tags: ruby
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - libgdbm5
+  when: ansible_distribution_version != '20.04'
+  become: true
+
+- name: Ruby | install libgdbm6 for the right ubuntu
+  tags: ruby
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - libgdbm6
+  when: ansible_distribution_version == '20.04'
+  become: true

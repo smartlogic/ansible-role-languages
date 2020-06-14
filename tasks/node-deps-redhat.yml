@@ -1,0 +1,10 @@
+---
+- name: NodeJS | install dependencies
+  tags: node
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - gpg
+      - curl
+  become: true

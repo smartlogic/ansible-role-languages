@@ -1,0 +1,8 @@
+---
+- hosts: all
+  vars:
+    asdf_user_create: true
+  environment:
+    PATH: /home/{{ asdf_user }}/.asdf/bin:/home/{{ asdf_user }}/.asdf/shims:{{ ansible_env.PATH }}
+  roles:
+    - { role: languages, tags: ["ruby"], action: "elixir" }

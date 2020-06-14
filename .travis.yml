@@ -1,0 +1,59 @@
+---
+env:
+  - distro: ubuntu1804
+    lang: all
+  - distro: ubuntu2004
+    lang: all
+  - distro: centos7
+    lang: all
+  - distro: ubuntu1804
+    lang: ruby
+  - distro: ubuntu2004
+    lang: ruby
+  - distro: centos7
+    lang: ruby
+  - distro: ubuntu1804
+    lang: ruby-258
+  - distro: ubuntu2004
+    lang: ruby-258
+  - distro: centos7
+    lang: ruby-258
+  - distro: ubuntu1804
+    lang: node
+  - distro: ubuntu2004
+    lang: node
+  - distro: centos7
+    lang: node
+  - distro: ubuntu1804
+    lang: elixir
+  - distro: ubuntu2004
+    lang: elixir
+  - distro: centos7
+    lang: elixir
+
+services:
+  - docker
+
+before_install:
+  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
+
+script:
+  - container_id=$(mktemp)
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/languages:ro --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro geerlingguy/docker-${distro}-ansible:latest "/lib/systemd/systemd" > "${container_id}"'
+  - >
+    docker exec --tty "$(cat ${container_id})" env TERM=xterm
+    ansible-playbook /etc/ansible/roles/languages/tests/${lang}.yml
+    --syntax-check
+  - >
+    travis_wait 30 docker exec --tty "$(cat ${container_id})" env TERM=xterm
+    ansible-playbook /etc/ansible/roles/languages/tests/${lang}.yml
+  - idempotence=$(mktemp)
+  - >
+    docker exec "$(cat ${container_id})"
+    ansible-playbook /etc/ansible/roles/languages/tests/${lang}.yml
+    | tee -a ${idempotence}
+  - >
+    tail ${idempotence}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)

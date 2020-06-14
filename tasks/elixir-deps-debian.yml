@@ -1,0 +1,16 @@
+---
+- name: Elixir | install dependencies
+  tags: elixir
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - git
+      - build-essential
+      - automake
+      - m4
+      - libncurses5-dev
+      - libssh-dev
+      - unixodbc-dev
+      - unzip
+  become: true

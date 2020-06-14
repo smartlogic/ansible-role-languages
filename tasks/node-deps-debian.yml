@@ -1,0 +1,11 @@
+---
+- name: NodeJS | install dependencies
+  tags: node
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - curl
+      - gpg
+      - dirmngr
+  become: true

@@ -1,0 +1,10 @@
+---
+- name: asdf-vm | install dependencies
+  tags: asdf
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - git
+      - curl
+  become: true
