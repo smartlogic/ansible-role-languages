@@ -6,5 +6,5 @@
     PATH: /home/{{ asdf_user }}/.asdf/bin:/home/{{ asdf_user }}/.asdf/shims:{{ ansible_env.PATH }}
   roles:
     - { role: languages, tags: ["ruby"], action: "ruby" }
-    - { role: languages, tags: ["ruby"], action: "node" }
-    - { role: languages, tags: ["ruby"], action: "elixir" }
+    - { role: languages, tags: ["node"], action: "node" }
+    - { role: languages, tags: ["elixir"], action: "elixir" }
