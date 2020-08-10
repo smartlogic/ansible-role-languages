@@ -1,7 +1,12 @@
 ---
+- include_tasks: node-deps-debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: node-deps-redhat.yml
+  when: ansible_os_family == 'RedHat'
 
 - name: Node | Check if asdf-node is present
-  shell: asdf plugin-list | grep nodejs
+  shell: asdf plugin list | grep nodejs
   ignore_errors: yes
   register: asdf_node_present
   tags: node
@@ -9,9 +14,9 @@
   become: true
   become_user: "{{ asdf_user }}"
 
-- name: Node | Install asdf-node
-  shell: asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-  when: asdf_node_present | failed
+- name: Node | Install asdf nodejs plugin
+  shell: asdf plugin add nodejs
+  when: asdf_node_present is failed
   tags: node
   become: true
   become_user: "{{ asdf_user }}"
@@ -25,9 +30,16 @@
   become: true
   become_user: "{{ asdf_user }}"
 
+- name: Node | Install nodejs keyring
+  shell: "bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'"
+  when: asdf_nodejs_version_present is failed
+  tags: node
+  become: true
+  become_user: "{{ asdf_user }}"
+
 - name: Node | Install nodejs version
-  shell: "bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring && asdf install nodejs {{ asdf_nodejs_version }}"
-  when: asdf_nodejs_version_present | failed
+  shell: "asdf install nodejs {{ asdf_nodejs_version }}"
+  when: asdf_nodejs_version_present is failed
   tags: node
   become: true
   become_user: "{{ asdf_user }}"

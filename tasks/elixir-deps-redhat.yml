@@ -1,0 +1,28 @@
+---
+- name: Elixir | install epel release
+  tags: elixir
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - epel-release
+  become: true
+
+- name: Elixir | install dependencies
+  tags: elixir
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - gcc
+      - gcc-c++
+      - glibc-devel
+      - make
+      - ncurses-devel
+      - openssl-devel
+      - autoconf
+      - git
+      - wget
+      - libxslt
+      - unzip
+  become: true
