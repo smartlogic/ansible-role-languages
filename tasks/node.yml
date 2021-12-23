@@ -30,13 +30,6 @@
   become: true
   become_user: "{{ asdf_user }}"
 
-- name: Node | Install nodejs keyring
-  shell: "bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'"
-  when: asdf_nodejs_version_present is failed
-  tags: node
-  become: true
-  become_user: "{{ asdf_user }}"
-
 - name: Node | Install nodejs version
   shell: "asdf install nodejs {{ asdf_nodejs_version }}"
   when: asdf_nodejs_version_present is failed
