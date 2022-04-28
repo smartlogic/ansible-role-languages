@@ -35,10 +35,11 @@
     src: /tmp/asdf-{{ asdf_version }}.tar.gz
     dest: "/home/{{ asdf_user }}/"
     remote_src: true
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
   tags: asdf
   when: asdf_present is failed
   become: true
-  become_user: "{{ asdf_user }}"
 
 - name: stat .asdf
   stat: path=/home/{{ asdf_user }}/.asdf
@@ -65,15 +66,17 @@
   file:
     path: "/home/{{ asdf_user }}/.tool-versions"
     state: touch
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
   tags: asdf
   when: asdf_tool_versions_stat.stat.exists == false
   become: true
-  become_user: "{{ asdf_user }}"
 
 - name: Source asdf for login shells
   lineinfile:
     path: /home/{{ asdf_user }}/.bashrc
     line: '. $HOME/.asdf/asdf.sh'
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
   tags: asdf
   become: true
-  become_user: "{{ asdf_user }}"

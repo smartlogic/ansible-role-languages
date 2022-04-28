@@ -42,8 +42,9 @@
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'ruby {{ asdf_ruby_version }}'
     regexp: '^ruby '
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
   become: true
-  become_user: "{{ asdf_user }}"
 
 - name: Ruby | stat bundler
   shell: gem list | grep bundler

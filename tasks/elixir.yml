@@ -74,13 +74,15 @@
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'erlang {{ asdf_erlang_version }}'
     regexp: '^erlang '
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
   become: true
-  become_user: "{{ asdf_user }}"
 
 - name: Elixir | Set global version of elixir
   lineinfile:
     path: "/home/{{ asdf_user }}/.tool-versions"
     line: 'elixir {{ asdf_elixir_version }}'
     regexp: '^elixir '
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
   become: true
-  become_user: "{{ asdf_user }}"
