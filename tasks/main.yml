@@ -1,11 +1,11 @@
 ---
 - include: asdf.yml
 
-- when: action == "elixir"
+- when: '"elixir" in actions'
   include: elixir.yml
 
-- when: action == "node"
+- when: '"node" in actions'
   include: node.yml
 
-- when: action == "ruby"
+- when: '"ruby" in actions'
   include: ruby.yml
