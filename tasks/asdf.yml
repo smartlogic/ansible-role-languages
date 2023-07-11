@@ -8,7 +8,7 @@
   when: asdf_user_create
 
 - name: Check if asdf is present
-  shell: "test -x /home/{{ asdf_user }}/.asdf/bin/asdf"
+  shell: "test -x /home/{{ asdf_user }}/.asdf-{{ asdf_version }}/bin/asdf"
   ignore_errors: yes
   register: asdf_present
   changed_when: false
@@ -42,14 +42,14 @@
   become: true
 
 - name: stat .asdf
-  stat: path=/home/{{ asdf_user }}/.asdf
+  stat: path=/home/{{ asdf_user }}/.asdf-{{ asdf_version }}
   register: asdf_stat
   tags: asdf
   become: true
   become_user: "{{ asdf_user }}"
 
 - name: Move asdf-version to .asdf
-  command: mv /home/{{ asdf_user }}/asdf-{{ asdf_version }} /home/{{ asdf_user }}/.asdf
+  command: mv /home/{{ asdf_user }}/asdf-{{ asdf_version }} /home/{{ asdf_user }}/.asdf-{{ asdf_version }}
   tags: asdf
   when: asdf_stat.stat.exists == false
   become: true
@@ -75,7 +75,7 @@
 - name: Source asdf for login shells
   lineinfile:
     path: /home/{{ asdf_user }}/.bashrc
-    line: '. $HOME/.asdf/asdf.sh'
+    line: '. $HOME/.asdf-{{ asdf_version }}/asdf.sh'
     owner: "{{ asdf_user }}"
     group: "{{ asdf_user }}"
   tags: asdf

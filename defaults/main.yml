@@ -1,6 +1,6 @@
 ---
 asdf_user_create: false
-asdf_version: '0.7.8'
+asdf_version: '0.11.3'
 asdf_user: 'deploy'
 
 asdf_erlang_version: '23.0.2'
